@@ -82,7 +82,7 @@ export default function StatusBar() {
           <button
             type="button"
             onClick={openPalette}
-            className="px-3 text-fg-dim transition-colors hover:bg-rule hover:text-fg"
+            className="hidden px-3 text-fg-dim transition-colors hover:bg-rule hover:text-fg sm:block"
             aria-label="Open command palette"
           >
             <span className="text-purple">⌘</span>K

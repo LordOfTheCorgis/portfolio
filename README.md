@@ -14,9 +14,14 @@ Deploys to Vercel with zero config.
 
 - `src/lib/data.ts` is the only place real content lives. Change a fact there and the hero, neofetch panel and terminal all pick it up.
 - `src/lib/site.ts` has the constants (launch date for uptime, links).
-- `src/lib/terminal/commands.ts` is the command registry. The xterm terminal runs it, the Cmd+K palette will list it.
-- `src/lib/sections.ts` is the list of tmux "windows" in the status bar. Only add a section there once it exists on the page.
+- `src/lib/terminal/commands.ts` is the command registry. The xterm terminal runs it, the Cmd+K palette lists it.
+- `src/lib/sections.ts` is the list of tmux "windows" in the status bar and the Cmd+K "go to" group.
+- `src/components/ui/Pane.tsx` wraps every section below the hero in the pane title strip.
 - `src/components/` is split by feature (hero, neofetch, terminal, layout, providers).
+
+## Contact form
+
+`POST /api/contact` validates with the shared zod schema. Set `RESEND_API_KEY` (and optionally `CONTACT_TO`, `CONTACT_FROM`) in Vercel and it sends through Resend. With no key it returns 501 and the form opens the visitor's mail client with everything filled in, so it works on day one either way.
 
 ## Motion
 

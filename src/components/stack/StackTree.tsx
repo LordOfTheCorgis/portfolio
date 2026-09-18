@@ -53,7 +53,7 @@ export default function StackTree() {
       <motion.pre
         initial={reduce ? false : "hidden"}
         whileInView="show"
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.1 }}
         variants={{ hidden: {}, show: { transition: { staggerChildren: 0.05 } } }}
         className="whitespace-pre-wrap text-[13px] leading-7 sm:text-sm"
       >
