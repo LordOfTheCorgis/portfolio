@@ -54,13 +54,13 @@ export default function BootLog() {
         whileInView="show"
         viewport={{ once: true, amount: 0.4 }}
         variants={{ hidden: {}, show: { transition: { staggerChildren: 0.11 } } }}
-        className="overflow-x-auto text-[12.5px] leading-6 sm:text-[13px]"
+        className="text-[12.5px] leading-6 sm:text-[13px]"
       >
         {LINES.map((l) => (
           <motion.li
             key={l.t}
             variants={{ hidden: { opacity: 0, x: -4 }, show: { opacity: 1, x: 0, transition: { duration: 0.18 } } }}
-            className="whitespace-nowrap"
+            className="pl-6 -indent-6 sm:pl-0 sm:indent-0 sm:whitespace-nowrap"
           >
             <span className="text-muted">[</span>
             <span className={STATUS[l.status].cls}>{STATUS[l.status].label}</span>
