@@ -31,11 +31,17 @@ const TAG_COLOR: Record<Tag, keyof typeof ansi> = {
 };
 const tags = (list: readonly Tag[]) => list.map((t) => c(TAG_COLOR[t], t)).join(c("muted", ","));
 
-// block letters for the login banner. two rows, warm ramp top to bottom
-export const bannerLines = (): string[] => [
-  c("amber", "█▀▀ █░█ ▄▀█ █▄░█") + "   " + c("orange", "█░█ █▀█ █ █▀ █▀▀ █░░"),
-  c("amber-deep", "██▄ ▀▄▀ █▀█ █░▀█") + "   " + c("red", "▀▄▀ █▄█ █ ▄█ ██▄ █▄▄"),
+// figlet Standard, coloured top to bottom on the warm ramp. String.raw so
+// the backslashes survive. 50 cols, fits a phone at 12px.
+const BANNER = [
+  String.raw`                                     _          _ `,
+  String.raw`   _____   ____ _ _ __   __   _____ (_)___  ___| |`,
+  String.raw`  / _ \ \ / / _` + "`" + String.raw` | '_ \  \ \ / / _ \| / __|/ _ \ |`,
+  String.raw` |  __/\ V / (_| | | | |  \ V / (_) | \__ \  __/ |`,
+  String.raw`  \___| \_/ \__,_|_| |_|   \_/ \___/|_|___/\___|_|`,
 ];
+const RAMP: (keyof typeof ansi)[] = ["amber", "amber", "orange", "orange", "red"];
+export const bannerLines = (): string[] => BANNER.map((l, i) => c(RAMP[i], l));
 
 export const neofetchLines = (): string[] => {
   const user = `${c("green", SITE.handle)}${c("muted", "@")}${c("green", SITE.hostname)}`;
