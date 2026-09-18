@@ -108,7 +108,7 @@ const commands: Command[] = [
       if (file === "experience.log") {
         return {
           lines: experience.flatMap((e) => [
-            `${c("muted", `[${e.start} → ${e.end}]`)} ${b(e.org)} ${c("muted", "·")} ${c("amber", e.role)}`,
+            `${c("muted", `[${e.start === e.end ? e.start : `${e.start} → ${e.end}`}]`)} ${b(e.org)} ${c("muted", "·")} ${c("amber", e.role)}`,
             ...e.bullets.map((bl) => `  ${c("green", "›")} ${bl}`),
             "",
           ]),
