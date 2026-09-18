@@ -11,6 +11,7 @@ import { completeCommand, runCommand } from "@/lib/terminal/commands";
 import { ansi, c } from "@/lib/terminal/ansi";
 import { TERM_RUN } from "@/lib/events";
 import { SITE } from "@/lib/site";
+import { scrollToEl } from "@/lib/scroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -183,29 +184,44 @@ export default function Terminal() {
       }
     });
 
-    /* type a command like a human would, then run it */
-    const typeAndRun = async (cmd: string) => {
+    /*
+      Type a command like a human would, then run it. Commands queue up so a
+      chip click and the scroll-in `help` don't stomp on each other. Learned
+      that one the hard way, the guard version just silently ate `help`.
+    */
+    const queue: string[] = [];
+    const drain = async () => {
       if (busy) return;
       busy = true;
-      if (buffer) {
-        clearLine();
-        buffer = "";
-      }
       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      for (const ch of cmd) {
-        buffer += ch;
-        term.write(ch);
-        if (!reduce) await new Promise((r) => setTimeout(r, 28 + Math.random() * 40));
+      const wait = (ms: number) => (reduce ? Promise.resolve() : new Promise((r) => setTimeout(r, ms)));
+      while (queue.length) {
+        const cmd = queue.shift()!;
+        if (buffer) {
+          clearLine();
+          buffer = "";
+        }
+        for (const ch of cmd) {
+          buffer += ch;
+          term.write(ch);
+          await wait(28 + Math.random() * 40);
+        }
+        await wait(160);
+        execute(buffer);
+        buffer = "";
+        await wait(250);
       }
-      if (!reduce) await new Promise((r) => setTimeout(r, 160));
-      execute(buffer);
-      buffer = "";
       busy = false;
+    };
+    const typeAndRun = (cmd: string) => {
+      queue.push(cmd);
+      void drain();
     };
 
     const onExternal = (e: Event) => {
       const cmd = (e as CustomEvent<string>).detail;
-      el.closest("section")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      const section = el.closest("section");
+      if (section) scrollToEl(section, -24);
       // let the scroll get going before the typing starts, feels more deliberate
       setTimeout(() => typeAndRun(cmd), 350);
     };
