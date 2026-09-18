@@ -47,7 +47,7 @@ export default function BootLog() {
   return (
     <section
       aria-label="Boot log"
-      className="mx-auto w-full max-w-7xl px-5 pb-6 pt-4 sm:px-8 lg:px-12"
+      className="mx-auto w-full max-w-7xl px-5 pb-4 pt-0 sm:px-8 lg:px-12"
     >
       <motion.ol
         initial={reduce ? false : "hidden"}

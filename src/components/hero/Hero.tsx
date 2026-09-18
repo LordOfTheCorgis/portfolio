@@ -56,7 +56,7 @@ export default function Hero() {
     <section
       id="hero"
       ref={root}
-      className="relative flex min-h-[calc(100svh-var(--status-bar-h))] w-full flex-col justify-center overflow-hidden"
+      className="relative flex min-h-[calc(86svh-var(--status-bar-h))] w-full flex-col justify-center overflow-hidden"
     >
       <NodeField />
       <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[1.15fr_1fr] lg:gap-10 lg:px-12">
