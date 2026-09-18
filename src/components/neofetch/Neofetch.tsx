@@ -35,13 +35,15 @@ export default function Neofetch() {
     return () => clearInterval(id);
   }, []);
 
-  const rows: [string, string][] = [
-    ["OS", profile.name],
-    ["Host", `${profile.schoolShort} (CS + AI, Class of ${profile.classOf})`],
-    ["Uptime", uptime || "booting…"],
-    ["Shell", profile.role],
-    ["Packages", `${projects.length} (projects), ${serverCount}+ (servers)`],
-    ["CPU", profile.languages.join(", ")],
+  // one colour per key. real neofetch uses a single accent, but a single
+  // accent is what got me "make it more colourful" so here we are
+  const rows: [string, string, string][] = [
+    ["OS", profile.name, "text-amber"],
+    ["Host", `${profile.schoolShort} (CS + AI, Class of ${profile.classOf})`, "text-orange"],
+    ["Uptime", uptime || "booting…", "text-green"],
+    ["Shell", profile.role, "text-aqua"],
+    ["Packages", `${projects.length} (projects), ${serverCount}+ (servers)`, "text-blue"],
+    ["CPU", profile.languages.join(", "), "text-purple"],
   ];
 
   return (
@@ -49,11 +51,12 @@ export default function Neofetch() {
       initial={reduce ? false : { opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
-      className="relative rounded-md border border-rule bg-bg-soft/80 p-4 sm:p-5 text-[13px] sm:text-sm"
+      className="relative rounded-md border border-rule bg-bg-soft/85 p-4 sm:p-5 text-[13px] sm:text-sm backdrop-blur-[2px]"
     >
       {/* fake pane title like tmux's pane border status */}
-      <div className="absolute -top-2.5 left-4 bg-bg px-1.5 text-[11px] text-muted">
-        pane 1 · neofetch
+      <div className="absolute -top-2.5 left-4 bg-bg px-1.5 text-[11px]">
+        <span className="text-aqua">pane 1</span>
+        <span className="text-muted"> · neofetch</span>
       </div>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
@@ -68,7 +71,7 @@ export default function Neofetch() {
           <div className="text-rule-strong mb-2">{"─".repeat(SITE.handle.length + SITE.hostname.length + 1)}</div>
 
           <dl>
-            {rows.map(([k, v], i) => (
+            {rows.map(([k, v, color], i) => (
               <motion.div
                 key={k}
                 initial={reduce ? false : { opacity: 0, x: -6 }}
@@ -76,7 +79,7 @@ export default function Neofetch() {
                 transition={{ duration: 0.3, delay: 1.1 + i * 0.07 }}
                 className="flex gap-2 leading-6"
               >
-                <dt className="w-[5.5rem] shrink-0 text-amber font-bold">{k}</dt>
+                <dt className={`w-[5.5rem] shrink-0 font-bold ${color}`}>{k}</dt>
                 <dd className="min-w-0 text-fg break-words" suppressHydrationWarning>
                   {v}
                 </dd>

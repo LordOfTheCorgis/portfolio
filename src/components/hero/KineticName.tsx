@@ -51,7 +51,7 @@ export default function KineticName() {
       <span ref={first} className="block text-fg">
         Evan
       </span>
-      <span ref={last} className="block text-amber glow">
+      <span ref={last} className="text-ember block pb-[0.08em]">
         Voisel
       </span>
     </h1>

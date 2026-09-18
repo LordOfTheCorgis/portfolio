@@ -5,13 +5,21 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, useReducedMotion } from "framer-motion";
 import KineticName from "./KineticName";
+import NodeField from "./NodeField";
 import Neofetch from "@/components/neofetch/Neofetch";
 import { runInTerminal } from "@/lib/events";
 import { SITE } from "@/lib/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const QUICK = ["whoami", "cat about.txt", "ls projects/", "cat experience.log"];
+// each chip hovers in its own gruvbox colour, same mapping the terminal
+// uses for tags so the two feel like one system
+const QUICK: { cmd: string; hover: string }[] = [
+  { cmd: "whoami", hover: "hover:border-green hover:text-green" },
+  { cmd: "cat about.txt", hover: "hover:border-aqua hover:text-aqua" },
+  { cmd: "ls projects/", hover: "hover:border-orange hover:text-orange" },
+  { cmd: "cat experience.log", hover: "hover:border-purple hover:text-purple" },
+];
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -48,9 +56,10 @@ export default function Hero() {
     <section
       id="hero"
       ref={root}
-      className="relative mx-auto flex min-h-[calc(100svh-var(--status-bar-h))] w-full max-w-7xl flex-col justify-center px-5 py-16 sm:px-8 lg:px-12"
+      className="relative flex min-h-[calc(100svh-var(--status-bar-h))] w-full flex-col justify-center overflow-hidden"
     >
-      <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-10">
+      <NodeField />
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-12 px-5 py-16 sm:px-8 lg:grid-cols-[1.15fr_1fr] lg:gap-10 lg:px-12">
         <div ref={left}>
           <motion.div {...fade(0)} className="mb-5 text-sm text-muted">
             <span className="text-green">{SITE.handle}@{SITE.hostname}</span>
@@ -66,17 +75,20 @@ export default function Hero() {
             {...fade(1.6)}
             className="mt-7 max-w-xl text-[15px] leading-relaxed text-fg-dim sm:text-base"
           >
-            CS + AI @ LSU <span className="text-muted">·</span> Founder, Lumix Solutions{" "}
-            <span className="text-muted">·</span> Infrastructure &amp; Systems
+            <span className="text-aqua">CS + AI @ LSU</span>
+            <span className="text-muted"> · </span>
+            <span className="text-orange">Founder, Lumix Solutions</span>
+            <span className="text-muted"> · </span>
+            <span className="text-purple">Infrastructure &amp; Systems</span>
           </motion.p>
 
           <motion.ul {...fade(1.8)} className="mt-8 flex flex-wrap gap-2" aria-label="Run a command">
-            {QUICK.map((cmd) => (
+            {QUICK.map(({ cmd, hover }) => (
               <li key={cmd}>
                 <button
                   type="button"
                   onClick={() => runInTerminal(cmd)}
-                  className="rounded-sm border border-rule bg-bg-soft px-2.5 py-1 text-[13px] text-fg-dim transition-colors hover:border-amber hover:text-amber"
+                  className={`rounded-sm border border-rule bg-bg-soft/90 px-2.5 py-1 text-[13px] text-fg-dim transition-colors ${hover}`}
                 >
                   <span className="text-green">$</span> {cmd}
                 </button>

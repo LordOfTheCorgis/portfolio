@@ -15,7 +15,7 @@ export default function RackLogo() {
       {Array.from({ length: UNITS }).map((_, i) => (
         <span key={i}>
           <span className="text-rule-strong">│ </span>
-          <span className="text-amber-deep">▓▓▓▓▓▓▓▓</span>
+          <span className={["text-amber-deep","text-orange","text-amber-deep","text-red"][i % 4]}>▓▓▓▓▓▓▓▓</span>
           <span className="text-rule-strong"> ·· </span>
           <span
             className="led text-green"
@@ -25,7 +25,7 @@ export default function RackLogo() {
           </span>
           <span> </span>
           <span
-            className="led text-amber"
+            className={`led ${i === 2 ? "text-aqua" : "text-amber"}`}
             style={{ ["--led-delay" as string]: `${i * 0.35 + 0.2}s`, ["--led-period" as string]: "1.3s" }}
           >
             ●
