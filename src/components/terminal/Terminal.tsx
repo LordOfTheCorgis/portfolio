@@ -42,20 +42,22 @@ const THEME = {
   brightWhite: "#ebdbb2",
 };
 
-// key sequences xterm hands us via onData
+// key sequences xterm hands us via onData. built from char codes on purpose,
+// an editor once "helpfully" turned the escaped literals into raw bytes.
+const ESC = String.fromCharCode(27);
 const KEY = {
   enter: "\r",
-  backspace: "",
-  ctrlC: "",
-  ctrlL: "",
+  backspace: String.fromCharCode(127),
+  ctrlC: String.fromCharCode(3),
+  ctrlL: String.fromCharCode(12),
   tab: "\t",
-  up: "[A",
-  down: "[B",
-  right: "[C",
-  left: "[D",
+  up: `${ESC}[A`,
+  down: `${ESC}[B`,
+  right: `${ESC}[C`,
+  left: `${ESC}[D`,
 };
 
-const CLEAR_SCREEN = "[2J[H";
+const CLEAR_SCREEN = `${ESC}[2J${ESC}[H`;
 
 /*
   Real xterm.js, real line editing (well, end-of-line editing, I'm not
