@@ -12,8 +12,6 @@ import { SITE } from "@/lib/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// each chip hovers in its own gruvbox colour, same mapping the terminal
-// uses for tags so the two feel like one system
 const QUICK: { cmd: string; hover: string }[] = [
   { cmd: "whoami", hover: "hover:border-green hover:text-green" },
   { cmd: "cat about.txt", hover: "hover:border-aqua hover:text-aqua" },
@@ -26,8 +24,6 @@ export default function Hero() {
   const left = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
 
-  // scroll-linked: name drifts up and fades as the terminal takes over.
-  // scrub so it's tied to scroll position, not a fire-once tween.
   useLayoutEffect(() => {
     if (reduce || !root.current || !left.current) return;
     const ctx = gsap.context(() => {

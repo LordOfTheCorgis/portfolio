@@ -9,11 +9,6 @@ import Pane from "@/components/ui/Pane";
 
 type Status = { state: "idle" } | { state: "sending" } | { state: "sent" } | { state: "mailto" } | { state: "error"; msg: string };
 
-/*
-  Contact as a command with flags. Each field is a --flag, submit is the
-  enter key. On a deploy without RESEND_API_KEY the API answers 501 and we
-  hand the message to the user's mail client instead of failing quietly.
-*/
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>({ state: "idle" });
   const {
@@ -52,7 +47,7 @@ export default function ContactForm() {
       }
       setStatus({ state: "error", msg: json.error ?? `http ${res.status}` });
     } catch {
-      // network down, offline, whatever. mailto still works.
+
       openMailto();
     }
   };
@@ -91,7 +86,7 @@ export default function ContactForm() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
-          {/* honeypot, hidden from humans and screen readers */}
+
           <div className="absolute -left-[9999px]" aria-hidden>
             <label>
               company <input tabIndex={-1} autoComplete="off" {...register("company")} />

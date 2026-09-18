@@ -1,8 +1,3 @@
-/*
-  Shared command registry. The xterm terminal runs these, and the Cmd+K
-  palette will list them later, so keep it dumb: name in, lines out.
-  Output is ansi-coloured strings; the palette can strip codes if it needs to.
-*/
 import { experience, profile, projects, serverCount, stack, type Tag } from "@/lib/data";
 import { SITE } from "@/lib/site";
 import { ansi, b, c } from "./ansi";
@@ -10,20 +5,18 @@ import { formatUptime } from "./uptime";
 
 export type CommandResult = {
   lines: string[];
-  // side effects the terminal itself has to handle
+
   action?: "clear" | { open: string };
 };
 
 export type Command = {
   name: string;
-  args?: string; // shown in help, e.g. "projects/"
+  args?: string;
   description: string;
-  color?: keyof typeof ansi; // how it shows in `help`
+  color?: keyof typeof ansi;
   run: (args: string[]) => CommandResult;
 };
 
-// tag -> colour, same mapping the react side uses so a project reads the
-// same in the terminal as it does in the card grid
 const TAG_COLOR: Record<Tag, keyof typeof ansi> = {
   Infra: "orange",
   AI: "purple",
@@ -31,8 +24,6 @@ const TAG_COLOR: Record<Tag, keyof typeof ansi> = {
 };
 const tags = (list: readonly Tag[]) => list.map((t) => c(TAG_COLOR[t], t)).join(c("muted", ","));
 
-// figlet Standard, coloured top to bottom on the warm ramp. String.raw so
-// the backslashes survive. 50 cols, fits a phone at 12px.
 const BANNER = [
   String.raw`                                     _          _ `,
   String.raw`   _____   ____ _ _ __   __   _____ (_)___  ___| |`,
@@ -57,7 +48,7 @@ export const neofetchLines = (): string[] => {
     `${c("purple", "CPU".padEnd(10))}${profile.languages.join(", ")}`,
     `${c("muted", "Location".padEnd(10))}${profile.location}`,
     "",
-    // colour swatch row like the real thing
+
     ["amber", "green", "aqua", "orange", "red", "blue", "purple", "muted"]
       .map((k) => `${ansi[k as keyof typeof ansi]}███${ansi.reset}`)
       .join(""),
@@ -109,8 +100,7 @@ const commands: Command[] = [
         return { lines: [`${c("blue", "projects/")}  about.txt  experience.log`] };
       }
       return {
-        // name + tags on one line, summary wrapped underneath. one long line
-        // per project wrapped mid-word at the cell edge and looked terrible
+
         lines: projects.flatMap((p) => [
           `${c("blue", (p.id + "/").padEnd(18))}${c("muted", "[")}${tags(p.tags)}${c("muted", "]")}${p.href ? `  ${c("muted", "→")} ${c("aqua", p.href)}` : ""}`,
           ...wrap(p.summary, 76).map((l) => `    ${c("fg-dim", l)}`),
@@ -192,7 +182,6 @@ const commands: Command[] = [
   },
 ];
 
-/* word wrap so about.txt doesn't run off the right edge on wide terms */
 function wrap(text: string, width: number): string[] {
   const words = text.split(" ");
   const out: string[] = [];
@@ -214,7 +203,7 @@ export const commandNames = commands.map((cmd) => cmd.name);
 export function runCommand(input: string): CommandResult {
   const [name, ...args] = input.trim().split(/\s+/);
   if (!name) return { lines: [] };
-  // "ls projects/" and "cat about.txt" both work, so does "neofetch"
+
   const cmd = commands.find((cmd) => cmd.name === name);
   if (!cmd) {
     return {
@@ -230,7 +219,7 @@ export function runCommand(input: string): CommandResult {
 export function completeCommand(partial: string): string[] {
   const [head, ...rest] = partial.split(/\s+/);
   if (rest.length === 0) return commandNames.filter((n) => n.startsWith(head));
-  // file-ish completion for the two commands that take one
+
   if (head === "cat") return ["about.txt", "experience.log"].filter((f) => f.startsWith(rest[0] ?? ""));
   if (head === "ls") return ["projects/"].filter((f) => f.startsWith(rest[0] ?? ""));
   if (head === "open") return ["github", "linkedin"].filter((f) => f.startsWith(rest[0] ?? ""));

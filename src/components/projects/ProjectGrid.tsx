@@ -7,12 +7,6 @@ import Pane from "@/components/ui/Pane";
 
 const TAGS: Tag[] = ["Infra", "AI", "Web"];
 
-/*
-  Card grid filtered by tag. Filters are styled as flags on the command in
-  the pane header, so `ls projects/ --tag=infra` is literally what you're
-  looking at. AI has no projects yet and the empty state says so instead of
-  hiding the filter, because the degree is in progress and that's the truth.
-*/
 export default function ProjectGrid() {
   const [active, setActive] = useState<Tag | null>(null);
   const reduce = useReducedMotion();

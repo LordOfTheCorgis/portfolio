@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 
-// xterm touches window at import time, so it can never render on the server
 const Terminal = dynamic(() => import("./Terminal"), {
   ssr: false,
   loading: () => (
@@ -13,10 +12,6 @@ const Terminal = dynamic(() => import("./Terminal"), {
   ),
 });
 
-/*
-  Window chrome around the terminal. Title bar mimics a tmux pane border
-  with the pane index so it matches the neofetch panel up in the hero.
-*/
 export default function TerminalSection() {
   return (
     <section

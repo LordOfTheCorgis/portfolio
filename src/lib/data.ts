@@ -1,8 +1,3 @@
-/*
-  All real content on the site. If a section shows a fact, it comes from
-  here. No lorem, no "coming soon".
-*/
-
 export type Tag = "Infra" | "AI" | "Web";
 
 export const profile = {
@@ -30,13 +25,11 @@ export type StackGroup = "infra" | "runtime" | "lang" | "web" | "data";
 
 export type StackItem = {
   name: string;
-  slug: string; // what shows in the tree listing
+  slug: string;
   group: StackGroup;
-  note: string; // one line on where it actually gets used
+  note: string;
 };
 
-// group -> colour lives in one place so the tree, the terminal and the
-// palette all agree
 export const stackGroupColor: Record<StackGroup, string> = {
   infra: "text-orange",
   runtime: "text-green",
@@ -66,7 +59,7 @@ export type Experience = {
   end: string;
   tags: Tag[];
   bullets: string[];
-  ref: string; // git-log style ref label in the timeline
+  ref: string;
 };
 
 export const experience: Experience[] = [

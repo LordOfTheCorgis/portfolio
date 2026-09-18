@@ -4,19 +4,12 @@ import { motion, useReducedMotion } from "framer-motion";
 import { experience, tagColor } from "@/lib/data";
 import Pane from "@/components/ui/Pane";
 
-/*
-  `git log --graph` as the timeline. The rail on the left is the graph,
-  each role is a commit with a ref label, bullets are the commit body.
-  Hashes are derived from the id so they're stable between builds and
-  don't look like I typed "abc1234" four times.
-*/
 function hash(id: string): string {
   let h = 2166136261;
   for (const ch of id) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
   return (h >>> 0).toString(16).padStart(8, "0").slice(0, 7);
 }
 
-// ordered by hand: HEAD on top, then most recent start
 const ORDER = ["lumix", "sec-fantasy", "gdg", "cfx"];
 
 export default function GitLog() {
@@ -32,7 +25,7 @@ export default function GitLog() {
         variants={{ hidden: {}, show: { transition: { staggerChildren: 0.12 } } }}
         className="relative"
       >
-        {/* the graph rail */}
+
         <span aria-hidden className="absolute left-[7px] top-3 bottom-3 w-px bg-rule-strong" />
 
         {items.map((e, i) => {
@@ -44,7 +37,7 @@ export default function GitLog() {
               variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0, transition: { duration: 0.3 } } }}
               className="relative pl-9 pb-10 last:pb-0"
             >
-              {/* commit dot, HEAD gets a ring */}
+
               <span
                 aria-hidden
                 className={`absolute left-0 top-[7px] h-[15px] w-[15px] rounded-full border-2 border-bg ${dot} ${

@@ -17,7 +17,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 const PROMPT = `${c("green", `${SITE.handle}@${SITE.hostname}`)}${c("muted", ":")}${c("blue", "~")}${c("fg", "$ ")}`;
 
-// gruvbox dark hard, mapped onto xterm's 16 slots
 const THEME = {
   background: "#1d2021",
   foreground: "#ebdbb2",
@@ -42,8 +41,6 @@ const THEME = {
   brightWhite: "#ebdbb2",
 };
 
-// key sequences xterm hands us via onData. built from char codes on purpose,
-// an editor once "helpfully" turned the escaped literals into raw bytes.
 const ESC = String.fromCharCode(27);
 const KEY = {
   enter: "\r",
@@ -59,11 +56,6 @@ const KEY = {
 
 const CLEAR_SCREEN = `${ESC}[2J${ESC}[H`;
 
-/*
-  Real xterm.js, real line editing (well, end-of-line editing, I'm not
-  reimplementing readline for a portfolio). History, tab completion,
-  ctrl+c, ctrl+l. Other components can push commands in via TERM_RUN.
-*/
 export default function Terminal() {
   const host = useRef<HTMLDivElement>(null);
 
@@ -92,7 +84,7 @@ export default function Terminal() {
     let buffer = "";
     const history: string[] = [];
     let histIdx = -1;
-    let busy = false; // true while auto-typing so keystrokes don't interleave
+    let busy = false;
 
     const prompt = () => term.write(`\r\n${PROMPT}`);
 
@@ -116,7 +108,7 @@ export default function Terminal() {
     };
 
     const clearLine = () => {
-      // move back over the current buffer and wipe it
+
       term.write("\b".repeat(buffer.length) + " ".repeat(buffer.length) + "\b".repeat(buffer.length));
     };
 
@@ -126,8 +118,6 @@ export default function Terminal() {
       term.write(buffer);
     };
 
-    // keystrokes that land while a command is auto-typing get replayed
-    // after, instead of vanishing. yes I found this by typing into it.
     const pending: string[] = [];
 
     const handle = (data: string) => {
@@ -179,9 +169,9 @@ export default function Terminal() {
           return;
         case KEY.left:
         case KEY.right:
-          return; // no mid-line cursor, see comment up top
+          return;
       }
-      // anything else printable (including pastes) just appends
+
       const printable = data.replace(/[^\x20-\x7e]/g, "");
       if (printable) {
         buffer += printable;
@@ -194,11 +184,6 @@ export default function Terminal() {
       else handle(data);
     });
 
-    /*
-      Type a command like a human would, then run it. Commands queue up so a
-      chip click and the scroll-in `help` don't stomp on each other. Learned
-      that one the hard way, the guard version just silently ate `help`.
-    */
     const queue: string[] = [];
     const drain = async () => {
       if (busy) return;
@@ -233,9 +218,7 @@ export default function Terminal() {
       const cmd = (e as CustomEvent<string>).detail;
       const section = el.closest("section");
       if (section) scrollToEl(section, -24);
-      // let the scroll get going before the typing starts, feels more deliberate.
-      // focus moves here too, otherwise the chip keeps it and space/enter
-      // re-click the chip. found that one the fun way.
+
       setTimeout(() => {
         term.focus();
         typeAndRun(cmd);
@@ -243,7 +226,6 @@ export default function Terminal() {
     };
     window.addEventListener(TERM_RUN, onExternal);
 
-    // open once the font is actually loaded or cell metrics come out wrong
     let ro: ResizeObserver | undefined;
     let st: ScrollTrigger | undefined;
     let disposed = false;
@@ -264,7 +246,6 @@ export default function Terminal() {
       ro = new ResizeObserver(() => fit.fit());
       ro.observe(el);
 
-      // first time the terminal scrolls into view it runs `help` by itself
       st = ScrollTrigger.create({
         trigger: el,
         start: "top 70%",

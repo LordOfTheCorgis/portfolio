@@ -5,11 +5,6 @@ export const alt = `${SITE.name} · Infrastructure & Systems`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-/*
-  OG card. Same gruvbox, same prompt line, no font loading gymnastics:
-  the default font in ImageResponse is fine at this size and I'd rather not
-  fetch a woff at build time for a link preview.
-*/
 export default function OpenGraphImage() {
   return new ImageResponse(
     (

@@ -1,11 +1,10 @@
-/* tiny ansi helper so command output doesn't turn into \x1b soup */
 const esc = (code: string) => `\x1b[${code}m`;
 
 export const ansi = {
   reset: esc("0"),
   bold: esc("1"),
   dim: esc("2"),
-  // gruvbox via 24-bit colour, xterm honours it
+
   amber: esc("38;2;250;189;47"),
   "amber-deep": esc("38;2;215;153;33"),
   green: esc("38;2;184;187;38"),

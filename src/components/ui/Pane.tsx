@@ -1,11 +1,5 @@
 import type { ReactNode } from "react";
 
-/*
-  Every section below the hero is a tmux pane: a title strip with the pane
-  index and the command that "produced" the content, then the content.
-  Keeps the whole page reading as one session instead of five landing
-  page sections wearing a monospace font.
-*/
 export default function Pane({
   id,
   index,

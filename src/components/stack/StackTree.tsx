@@ -4,18 +4,12 @@ import { motion, useReducedMotion } from "framer-motion";
 import { stack, stackGroupColor, type StackGroup } from "@/lib/data";
 import Pane from "@/components/ui/Pane";
 
-/*
-  `tree stack/`. Groups are directories, tools are files, the note is what
-  tree would never print but a README would. Real box-drawing glyphs so it
-  copies out of the page as valid tree output.
-*/
 const ORDER: StackGroup[] = ["infra", "runtime", "lang", "web", "data"];
 
 export default function StackTree() {
   const reduce = useReducedMotion();
   const groups = ORDER.map((g) => ({ g, items: stack.filter((s) => s.group === g) }));
 
-  // flatten to rows first so the stagger runs top to bottom, not per group
   const rows: React.ReactNode[] = [];
   rows.push(
     <span key="root" className="text-fg font-bold">

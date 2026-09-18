@@ -18,14 +18,9 @@ const SWATCHES = [
   "bg-muted",
 ];
 
-/*
-  Panel version of `neofetch`, sits next to the hero name. Same facts as the
-  terminal command so the two never disagree. Uptime re-renders every minute.
-*/
 export default function Neofetch() {
   const reduce = useReducedMotion();
-  // empty on the server, filled on mount. avoids the hydration mismatch
-  // you'd get from Date() differing between server and client.
+
   const [uptime, setUptime] = useState("");
 
   useEffect(() => {
@@ -35,8 +30,6 @@ export default function Neofetch() {
     return () => clearInterval(id);
   }, []);
 
-  // one colour per key. real neofetch uses a single accent, but a single
-  // accent is what got me "make it more colourful" so here we are
   const rows: [string, string, string][] = [
     ["OS", profile.name, "text-amber"],
     ["Host", `${profile.schoolShort} (CS + AI, Class of ${profile.classOf})`, "text-orange"],
@@ -53,7 +46,7 @@ export default function Neofetch() {
       transition={{ duration: 0.5, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
       className="relative rounded-md border border-rule bg-bg-soft/85 p-4 sm:p-5 text-[13px] sm:text-sm backdrop-blur-[2px]"
     >
-      {/* fake pane title like tmux's pane border status */}
+
       <div className="absolute -top-2.5 left-4 bg-bg px-1.5 text-[11px]">
         <span className="text-aqua">pane 1</span>
         <span className="text-muted"> · neofetch</span>

@@ -2,11 +2,6 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 
-/*
-  dmesg between the hero and the terminal. Every line is a real fact from
-  the resume, dressed as a kernel message. Prints once when scrolled into
-  view. The WARN line is the only joke on the site, leave it.
-*/
 type Line = {
   t: string;
   status: "OK" | "WARN" | "INFO";

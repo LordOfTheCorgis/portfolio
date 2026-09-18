@@ -1,8 +1,3 @@
-/*
-  The neofetch "distro logo", except it's a 4U rack because that's what this
-  site is about. LEDs blink on staggered delays so it looks alive without
-  being a whole animation system.
-*/
 const UNITS = 4;
 
 export default function RackLogo() {

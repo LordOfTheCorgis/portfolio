@@ -9,11 +9,6 @@ import { scrollToEl } from "@/lib/scroll";
 import { SITE } from "@/lib/site";
 import { projects, tagColor } from "@/lib/data";
 
-/*
-  Cmd+K, drawn like fzf: a `>` prompt, a `n/m` match counter, a pointer on
-  the selected row, ctrl+j/k as well as arrows. cmdk does the fuzzy match
-  and the keyboard plumbing, this file is mostly styling and the actions.
-*/
 type Item = {
   id: string;
   group: "go" | "run" | "open" | "projects";
@@ -36,7 +31,6 @@ const GROUP_COLOR: Record<Item["group"], string> = {
   open: "text-purple",
 };
 
-// commands that need an argument get the sensible one filled in
 const RUNNABLE: Record<string, string> = {
   ls: "ls projects/",
   cat: "cat about.txt",
@@ -80,7 +74,6 @@ export default function CommandPalette() {
     return list;
   }, [go]);
 
-  // cmd+k / ctrl+k toggles, esc closes (cmdk handles esc inside the dialog)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -100,7 +93,7 @@ export default function CommandPalette() {
   const select = (item: Item) => {
     setOpen(false);
     setQuery("");
-    // let the dialog unmount before scrolling or the focus restore fights lenis
+
     setTimeout(item.action, 60);
   };
 
@@ -118,7 +111,7 @@ export default function CommandPalette() {
       overlayClassName="fixed inset-0 z-[70] bg-bg/70 backdrop-blur-[2px]"
       contentClassName="fixed left-1/2 top-[14vh] z-[80] w-[min(92vw,38rem)] -translate-x-1/2 overflow-hidden rounded-md border border-rule-strong bg-bg-soft shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]"
       onKeyDown={(e) => {
-        // fzf muscle memory
+
         if (e.ctrlKey && e.key === "j") {
           e.preventDefault();
           e.currentTarget.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
@@ -187,13 +180,11 @@ export default function CommandPalette() {
         </span>
       </div>
 
-      {/* cmdk exposes the filtered count through a hidden effect-free trick: read it off the list */}
       <MatchCounter onCount={setCount} />
     </Command.Dialog>
   );
 }
 
-/* counts rendered items after each filter pass. cheap, runs on query change only */
 function MatchCounter({ onCount }: { onCount: (n: number) => void }) {
   useEffect(() => {
     const list = document.querySelector("[cmdk-list]");

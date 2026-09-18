@@ -6,14 +6,8 @@ import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 
 gsap.registerPlugin(ScrambleTextPlugin);
 
-// glyphs that look like they belong in a terminal, not the usual A-Z soup
 const CHARS = "01<>/\\|_-=+#$%&*[]{}";
 
-/*
-  The name resolves out of noise, line by line. This is the one "kinetic"
-  moment on the page, everything else stays still so this reads as expensive
-  instead of busy.
-*/
 export default function KineticName() {
   const first = useRef<HTMLSpanElement>(null);
   const last = useRef<HTMLSpanElement>(null);

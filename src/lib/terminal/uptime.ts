@@ -1,6 +1,5 @@
 import { SITE } from "@/lib/site";
 
-/* "3 days, 4 hours, 12 mins" like real neofetch. drops zero units. */
 export function formatUptime(now: Date = new Date()): string {
   const ms = Math.max(0, now.getTime() - SITE.launchedAt.getTime());
   const mins = Math.floor(ms / 60000);

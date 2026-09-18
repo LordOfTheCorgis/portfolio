@@ -6,10 +6,6 @@ import { SITE } from "@/lib/site";
 import { serverCount } from "@/lib/data";
 import { openPalette } from "@/components/palette/CommandPalette";
 
-/*
-  tmux status line as the site nav. Fixed bottom, windows are anchors,
-  the active one tracks whichever section is mostly on screen.
-*/
 export default function StatusBar() {
   const [active, setActive] = useState<SectionId>("hero");
   const [clock, setClock] = useState<string>("");
@@ -19,8 +15,6 @@ export default function StatusBar() {
       .map((s) => document.getElementById(s.id))
       .filter((el): el is HTMLElement => !!el);
 
-    // rootMargin shrinks the viewport to a band around the middle so the
-    // active window flips roughly when a section crosses centre, not on edges
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
@@ -50,7 +44,7 @@ export default function StatusBar() {
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
       <div className="flex h-full items-stretch overflow-hidden">
-        {/* session segment, powerline arrow after it */}
+
         <span className="shrink-0 bg-amber text-bg font-bold px-3">[{SITE.handle}]</span>
         <span className="seg-arrow shrink-0 border-l-[0.6rem] border-l-amber" aria-hidden />
 

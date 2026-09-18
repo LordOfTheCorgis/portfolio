@@ -2,22 +2,12 @@
 
 import { useEffect, useRef } from "react";
 
-/*
-  Cluster status board as texture. A grid of cells behind the hero, most of
-  them barely there, a few of them lit and pulsing like nodes reporting in.
-  Every so often one flips red and heals back to green, because that's what
-  a fleet actually looks like at 3am. Cursor proximity brightens nearby cells.
-
-  Canvas, not DOM, because a 50x30 grid of divs with animations is a great
-  way to make a laptop fan spin.
-*/
-
 type Node = {
   col: number;
   row: number;
   color: [number, number, number];
   born: number;
-  life: number; // ms
+  life: number;
 };
 
 const GAP = 30;
@@ -87,7 +77,6 @@ export default function NodeField() {
     const draw = (now: number) => {
       ctx.clearRect(0, 0, w, h);
 
-      // base grid. cheap, one fillStyle for all of them
       ctx.fillStyle = `rgba(${RGB.fg.join(",")},0.055)`;
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
@@ -95,7 +84,6 @@ export default function NodeField() {
         }
       }
 
-      // cursor halo, brightens cells within ~150px
       if (mouse.x > -1) {
         const R = 150;
         const c0 = Math.max(0, Math.floor((mouse.x - R) / GAP));
@@ -115,7 +103,6 @@ export default function NodeField() {
         }
       }
 
-      // live nodes. ease in, hold, ease out, then get culled
       for (let i = nodes.length - 1; i >= 0; i--) {
         const n = nodes[i];
         const t = (now - n.born) / n.life;
@@ -145,7 +132,7 @@ export default function NodeField() {
 
     resize();
     if (reduce) {
-      // static frame with a handful of lit nodes, no loop
+
       for (let i = 0; i < 24; i++) spawn(-1000);
       nodes.forEach((n) => (n.life = 1e9));
       draw(0);
@@ -166,7 +153,6 @@ export default function NodeField() {
     parent.addEventListener("pointermove", onMove);
     parent.addEventListener("pointerleave", onLeave);
 
-    // don't burn frames while the hero is scrolled away
     const io = new IntersectionObserver(([e]) => {
       if (reduce) return;
       const visible = e.isIntersecting;

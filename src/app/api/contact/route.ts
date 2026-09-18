@@ -2,12 +2,6 @@ import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/contact-schema";
 import { SITE } from "@/lib/site";
 
-/*
-  POST /api/contact
-  With RESEND_API_KEY set it sends through Resend's REST API (no SDK, it's
-  one fetch). Without it, returns 501 and the client falls back to mailto,
-  so the form still works on a fresh Vercel deploy with zero env vars.
-*/
 export async function POST(req: Request) {
   let body: unknown;
   try {
@@ -22,7 +16,6 @@ export async function POST(req: Request) {
   }
   const { name, email, message, company } = parsed.data;
 
-  // honeypot tripped: pretend it worked, don't tell the bot anything
   if (company) return NextResponse.json({ ok: true });
 
   const key = process.env.RESEND_API_KEY;

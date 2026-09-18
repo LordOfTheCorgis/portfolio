@@ -8,11 +8,6 @@ import { setLenis } from "@/lib/scroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/*
-  Lenis drives scroll, GSAP's ticker drives Lenis, ScrollTrigger listens to
-  Lenis. Doing it any other way gives you two RAF loops fighting each other
-  and jittery pinned sections. Reduced motion just skips all of it.
-*/
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -20,7 +15,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     const lenis = new Lenis({
       lerp: 0.1,
       wheelMultiplier: 0.9,
-      // anchor clicks in the status bar should still animate
+
       anchors: { offset: 0 },
     });
 

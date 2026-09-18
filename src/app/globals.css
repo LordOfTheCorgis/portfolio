@@ -1,10 +1,5 @@
 @import "tailwindcss";
 
-/*
-  Gruvbox dark (hard). Committed to it, not Nord.
-  Amber is the accent AND the phosphor colour on purpose so the CRT stuff
-  reads as part of the palette instead of a bolt-on effect.
-*/
 @theme {
   --color-bg: #1d2021;
   --color-bg-soft: #282828;
@@ -35,7 +30,7 @@
 
 html {
   background: var(--color-bg);
-  scroll-behavior: auto; /* lenis owns scrolling, native smooth fights it */
+  scroll-behavior: auto;
 }
 
 body {
@@ -53,17 +48,11 @@ body {
   color: var(--color-bg);
 }
 
-/* keyboard focus has to be visible on a dark mono site or it's just gone */
 :focus-visible {
   outline: 2px solid var(--color-amber);
   outline-offset: 3px;
 }
 
-/*
-  Scanlines. Fixed overlay, pointer-events off, very low opacity.
-  If you can *see* it at a glance it's too strong.
-  Had a vignette here too, cut it, three CRT effects was one too many.
-*/
 .crt::before {
   content: "";
   position: fixed;
@@ -84,7 +73,6 @@ body {
   text-shadow: var(--shadow-phosphor);
 }
 
-/* blinking block cursor used in the hero prompt */
 @keyframes blink {
   0%, 49% { opacity: 1; }
   50%, 100% { opacity: 0; }
@@ -93,7 +81,6 @@ body {
   animation: blink 1.1s steps(1) infinite;
 }
 
-/* rack LEDs on the neofetch logo. each one gets its own delay inline */
 @keyframes led {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.25; }
@@ -110,7 +97,6 @@ body {
   }
 }
 
-/* xterm overrides. the default canvas has its own bg, want the page's */
 .xterm {
   padding: 0.75rem 1rem;
 }
@@ -120,8 +106,6 @@ body {
   scrollbar-color: var(--color-rule-strong) transparent;
 }
 
-/* gruvbox warm ramp for the surname. text-shadow would paint over clipped
-   text so the glow goes through drop-shadow instead */
 .text-ember {
   background: linear-gradient(100deg, #fabd2f 0%, #fe8019 55%, #fb4934 100%);
   -webkit-background-clip: text;
@@ -130,7 +114,6 @@ body {
   filter: drop-shadow(0 0 10px rgba(254, 128, 25, 0.28));
 }
 
-/* powerline-ish arrow between status bar segments */
 .seg-arrow {
   width: 0;
   height: 0;
