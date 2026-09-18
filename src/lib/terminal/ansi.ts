@@ -7,6 +7,7 @@ export const ansi = {
   dim: esc("2"),
   // gruvbox via 24-bit colour, xterm honours it
   amber: esc("38;2;250;189;47"),
+  "amber-deep": esc("38;2;215;153;33"),
   green: esc("38;2;184;187;38"),
   aqua: esc("38;2;142;192;124"),
   orange: esc("38;2;254;128;25"),

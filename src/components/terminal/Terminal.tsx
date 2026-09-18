@@ -7,7 +7,7 @@ import { WebLinksAddon } from "@xterm/addon-web-links";
 import "@xterm/xterm/css/xterm.css";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { completeCommand, runCommand } from "@/lib/terminal/commands";
+import { bannerLines, completeCommand, runCommand } from "@/lib/terminal/commands";
 import { ansi, c } from "@/lib/terminal/ansi";
 import { TERM_RUN } from "@/lib/events";
 import { SITE } from "@/lib/site";
@@ -239,6 +239,8 @@ export default function Terminal() {
       fit.fit();
       term.write(
         [
+          ...bannerLines(),
+          "",
           c("muted", `Last login: ${new Date().toDateString()} on ttys000`),
           `${ansi.dim}welcome to ${SITE.handle}@${SITE.hostname}. type ${ansi.reset}${c("green", "help")}${ansi.dim} to see what's here.${ansi.reset}`,
         ].join("\r\n"),

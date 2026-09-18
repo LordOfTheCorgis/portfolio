@@ -3,7 +3,7 @@
   palette will list them later, so keep it dumb: name in, lines out.
   Output is ansi-coloured strings; the palette can strip codes if it needs to.
 */
-import { experience, profile, projects, serverCount, stack } from "@/lib/data";
+import { experience, profile, projects, serverCount, stack, type Tag } from "@/lib/data";
 import { SITE } from "@/lib/site";
 import { ansi, b, c } from "./ansi";
 import { formatUptime } from "./uptime";
@@ -18,25 +18,41 @@ export type Command = {
   name: string;
   args?: string; // shown in help, e.g. "projects/"
   description: string;
+  color?: keyof typeof ansi; // how it shows in `help`
   run: (args: string[]) => CommandResult;
 };
 
 const line = (label: string, value: string) =>
   `${c("amber", label.padEnd(10))}${value}`;
 
+// tag -> colour, same mapping the react side uses so a project reads the
+// same in the terminal as it does in the card grid
+const TAG_COLOR: Record<Tag, keyof typeof ansi> = {
+  Infra: "orange",
+  AI: "purple",
+  Web: "aqua",
+};
+const tags = (list: readonly Tag[]) => list.map((t) => c(TAG_COLOR[t], t)).join(c("muted", ","));
+
+// block letters for the login banner. two rows, warm ramp top to bottom
+export const bannerLines = (): string[] => [
+  c("amber", "█▀▀ █░█ ▄▀█ █▄░█") + "   " + c("orange", "█░█ █▀█ █ █▀ █▀▀ █░░"),
+  c("amber-deep", "██▄ ▀▄▀ █▀█ █░▀█") + "   " + c("red", "▀▄▀ █▄█ █ ▄█ ██▄ █▄▄"),
+];
+
 export const neofetchLines = (): string[] => {
   const user = `${c("green", SITE.handle)}${c("muted", "@")}${c("green", SITE.hostname)}`;
   return [
     user,
     c("muted", "-".repeat(SITE.handle.length + SITE.hostname.length + 1)),
-    line("OS", profile.name),
-    line("Host", `${profile.schoolShort} (CS + AI, Class of ${profile.classOf})`),
-    line("Kernel", profile.degrees.join(" / ")),
-    line("Uptime", formatUptime()),
-    line("Shell", profile.role),
-    line("Packages", `${projects.length} (projects), ${serverCount}+ (servers)`),
-    line("CPU", profile.languages.join(", ")),
-    line("Location", profile.location),
+    `${c("amber", "OS".padEnd(10))}${profile.name}`,
+    `${c("orange", "Host".padEnd(10))}${profile.schoolShort} (CS + AI, Class of ${profile.classOf})`,
+    `${c("red", "Kernel".padEnd(10))}${profile.degrees.join(" / ")}`,
+    `${c("green", "Uptime".padEnd(10))}${formatUptime()}`,
+    `${c("aqua", "Shell".padEnd(10))}${profile.role}`,
+    `${c("blue", "Packages".padEnd(10))}${projects.length} (projects), ${serverCount}+ (servers)`,
+    `${c("purple", "CPU".padEnd(10))}${profile.languages.join(", ")}`,
+    `${c("muted", "Location".padEnd(10))}${profile.location}`,
     "",
     // colour swatch row like the real thing
     ["amber", "green", "aqua", "orange", "red", "blue", "purple", "muted"]
@@ -54,7 +70,7 @@ const commands: Command[] = [
         b("available commands"),
         ...commands.map(
           (cmd) =>
-            `  ${c("green", cmd.name.padEnd(10))}${c("muted", (cmd.args ?? "").padEnd(16))}${cmd.description}`,
+            `  ${c(cmd.color ?? "green", cmd.name.padEnd(10))}${c("muted", (cmd.args ?? "").padEnd(16))}${cmd.description}`,
         ),
         "",
         c("muted", "tab completes, ↑/↓ walks history, ctrl+l clears"),
@@ -63,6 +79,7 @@ const commands: Command[] = [
   },
   {
     name: "whoami",
+    color: "green",
     description: "name, degree, role",
     run: () => ({
       lines: [
@@ -77,6 +94,7 @@ const commands: Command[] = [
   },
   {
     name: "ls",
+    color: "aqua",
     args: "projects/",
     description: "list projects",
     run: (args) => {
@@ -88,15 +106,19 @@ const commands: Command[] = [
         return { lines: [`${c("blue", "projects/")}  about.txt  experience.log`] };
       }
       return {
-        lines: projects.map(
-          (p) =>
-            `${c("aqua", (p.id + "/").padEnd(18))}${c("muted", `[${p.tags.join(", ")}]`.padEnd(16))}${p.summary}`,
-        ),
+        lines: projects.map((p) => {
+          // padEnd on a coloured string counts escape codes, so pad the raw
+          // label and colour it after
+          const rawTags = `[${p.tags.join(",")}]`;
+          const pad = " ".repeat(Math.max(0, 14 - rawTags.length));
+          return `${c("blue", (p.id + "/").padEnd(18))}${c("muted", "[")}${tags(p.tags)}${c("muted", "]")}${pad}${p.summary}`;
+        }),
       };
     },
   },
   {
     name: "cat",
+    color: "aqua",
     args: "<file>",
     description: "about.txt or experience.log",
     run: (args) => {
@@ -108,7 +130,7 @@ const commands: Command[] = [
       if (file === "experience.log") {
         return {
           lines: experience.flatMap((e) => [
-            `${c("muted", `[${e.start === e.end ? e.start : `${e.start} → ${e.end}`}]`)} ${b(e.org)} ${c("muted", "·")} ${c("amber", e.role)}`,
+            `${c("muted", `[${e.start === e.end ? e.start : `${e.start} → ${e.end}`}]`)} ${c(TAG_COLOR[e.tags[0]], e.org)} ${c("muted", "·")} ${c("amber", e.role)} ${c("muted", "[")}${tags(e.tags)}${c("muted", "]")}`,
             ...e.bullets.map((bl) => `  ${c("green", "›")} ${bl}`),
             "",
           ]),
@@ -119,18 +141,24 @@ const commands: Command[] = [
   },
   {
     name: "neofetch",
+    color: "amber",
     description: "system info",
     run: () => ({ lines: neofetchLines() }),
   },
   {
     name: "stack",
+    color: "orange",
     description: "what I actually use",
     run: () => ({
-      lines: stack.map((s) => `${c("muted", s.group.padEnd(9))}${s.name}`),
+      lines: stack.map((s) => {
+        const col: Record<string, keyof typeof ansi> = { infra: "orange", runtime: "green", lang: "amber", web: "aqua", data: "blue" };
+        return `${c(col[s.group] ?? "muted", s.group.padEnd(9))}${s.name}`;
+      }),
     }),
   },
   {
     name: "contact",
+    color: "purple",
     description: "where to find me",
     run: () => ({
       lines: [
@@ -143,6 +171,7 @@ const commands: Command[] = [
   },
   {
     name: "open",
+    color: "purple",
     args: "github|linkedin",
     description: "open a link in a new tab",
     run: (args) => {
@@ -154,6 +183,7 @@ const commands: Command[] = [
   },
   {
     name: "clear",
+    color: "muted",
     description: "clear the screen",
     run: () => ({ lines: [], action: "clear" }),
   },
