@@ -155,7 +155,7 @@ const commands: Command[] = [
     run: () => ({
       lines: stack.map((s) => {
         const col: Record<string, keyof typeof ansi> = { infra: "orange", runtime: "green", lang: "amber", web: "aqua", data: "blue" };
-        return `${c(col[s.group] ?? "muted", s.group.padEnd(9))}${s.name}`;
+        return `${c(col[s.group] ?? "muted", s.group.padEnd(9))}${s.name.padEnd(30)}${c("muted", s.note)}`;
       }),
     }),
   },

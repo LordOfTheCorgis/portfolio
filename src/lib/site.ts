@@ -15,4 +15,6 @@ export const SITE = {
     "Evan Voisel: LSU Computer Science + Artificial Intelligence student, founder of Lumix Solutions, running Proxmox infrastructure across 50+ servers. Systems, Linux, and the tooling around them.",
   github: "https://github.com/LordOfTheCorgis",
   linkedin: "https://www.linkedin.com/in/evanvoisel",
+  // contact form falls back to mailto here when there's no RESEND_API_KEY
+  email: "evanvoisel.official@gmail.com",
 } as const;

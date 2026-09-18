@@ -26,18 +26,37 @@ export const profile = {
   ],
 } as const;
 
-export const stack = [
-  { name: "Proxmox VE", group: "infra" },
-  { name: "Linux system administration", group: "infra" },
-  { name: "Node.js", group: "runtime" },
-  { name: "Bun", group: "runtime" },
-  { name: "TypeScript / JavaScript", group: "lang" },
-  { name: "Lua", group: "lang" },
-  { name: "React Native", group: "web" },
-  { name: "Firebase / Firestore", group: "data" },
-  { name: "Supabase", group: "data" },
-  { name: "Drizzle ORM", group: "data" },
-] as const;
+export type StackGroup = "infra" | "runtime" | "lang" | "web" | "data";
+
+export type StackItem = {
+  name: string;
+  slug: string; // what shows in the tree listing
+  group: StackGroup;
+  note: string; // one line on where it actually gets used
+};
+
+// group -> colour lives in one place so the tree, the terminal and the
+// palette all agree
+export const stackGroupColor: Record<StackGroup, string> = {
+  infra: "text-orange",
+  runtime: "text-green",
+  lang: "text-amber",
+  web: "text-aqua",
+  data: "text-blue",
+};
+
+export const stack: StackItem[] = [
+  { name: "Proxmox VE", slug: "proxmox-ve", group: "infra", note: "the Lumix cluster. 50+ nodes, VM and LXC templates, provisioning hooks" },
+  { name: "Linux system administration", slug: "linux-sysadmin", group: "infra", note: "Debian hosts, networking, DDoS mitigation, the 3am pages" },
+  { name: "Node.js", slug: "node", group: "runtime", note: "CFX backends and Lumix tooling. where the 67% latency cut happened" },
+  { name: "Bun", slug: "bun", group: "runtime", note: "scripts and services where startup time and TS-without-a-build matter" },
+  { name: "TypeScript / JavaScript", slug: "typescript", group: "lang", note: "everything web-side, seven years of it" },
+  { name: "Lua", slug: "lua", group: "lang", note: "CFX scripts and frameworks in front of 5,000+ players" },
+  { name: "React Native", slug: "react-native", group: "web", note: "SEC Fantasy mobile app, end to end features" },
+  { name: "Firebase / Firestore", slug: "firestore", group: "data", note: "SEC Fantasy schema, security rules, realtime listeners" },
+  { name: "Supabase", slug: "supabase", group: "data", note: "Postgres, auth and storage for web projects" },
+  { name: "Drizzle ORM", slug: "drizzle", group: "data", note: "typed SQL on top of the Postgres side" },
+];
 
 export type Experience = {
   id: string;
@@ -47,6 +66,7 @@ export type Experience = {
   end: string;
   tags: Tag[];
   bullets: string[];
+  ref: string; // git-log style ref label in the timeline
 };
 
 export const experience: Experience[] = [
@@ -57,6 +77,7 @@ export const experience: Experience[] = [
     start: "Dec 2025",
     end: "Present",
     tags: ["Infra"],
+    ref: "HEAD -> lumix",
     bullets: [
       "Architected and operate Proxmox-based virtualization infrastructure across 50+ Linux servers in the US for game and web hosting.",
       "Built automated VPS provisioning so new customer nodes come up without a human in the loop.",
@@ -70,6 +91,7 @@ export const experience: Experience[] = [
     start: "2018",
     end: "Present",
     tags: ["Web", "Infra"],
+    ref: "cfx/since-2018",
     bullets: [
       "7+ years shipping scripts and frameworks in Lua and JavaScript to 5,000+ active users.",
       "Cut server-side latency 67% by profiling and rewriting hot paths in the Node.js layer.",
@@ -83,6 +105,7 @@ export const experience: Experience[] = [
     start: "Summer 2026",
     end: "Summer 2026",
     tags: ["Web"],
+    ref: "intern/sec-fantasy",
     bullets: [
       "Built React Native features for the fantasy app end to end.",
       "Designed Firestore schema and security rules for user, league, and scoring data.",
@@ -96,6 +119,7 @@ export const experience: Experience[] = [
     start: "2025",
     end: "Present",
     tags: ["Web", "AI"],
+    ref: "community/gdg-lsu",
     bullets: [
       "Outreach for Google Developer Group at LSU and the Geaux Hack hackathon.",
       "Help get students who have never shipped anything to ship something over a weekend.",
@@ -141,3 +165,14 @@ export const projects: Project[] = [
 ];
 
 export const serverCount = 50;
+
+export const tagColor: Record<Tag, string> = {
+  Infra: "text-orange",
+  AI: "text-purple",
+  Web: "text-aqua",
+};
+export const tagBorder: Record<Tag, string> = {
+  Infra: "border-orange",
+  AI: "border-purple",
+  Web: "border-aqua",
+};
