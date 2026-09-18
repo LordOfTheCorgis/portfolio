@@ -16,6 +16,7 @@ export const ansi = {
   purple: esc("38;2;211;134;155"),
   muted: esc("38;2;146;131;116"),
   fg: esc("38;2;235;219;178"),
+  "fg-dim": esc("38;2;168;153;132"),
 };
 
 export const c = (color: keyof typeof ansi, s: string) =>

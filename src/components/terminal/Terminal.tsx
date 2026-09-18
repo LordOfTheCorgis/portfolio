@@ -233,8 +233,13 @@ export default function Terminal() {
       const cmd = (e as CustomEvent<string>).detail;
       const section = el.closest("section");
       if (section) scrollToEl(section, -24);
-      // let the scroll get going before the typing starts, feels more deliberate
-      setTimeout(() => typeAndRun(cmd), 350);
+      // let the scroll get going before the typing starts, feels more deliberate.
+      // focus moves here too, otherwise the chip keeps it and space/enter
+      // re-click the chip. found that one the fun way.
+      setTimeout(() => {
+        term.focus();
+        typeAndRun(cmd);
+      }, 350);
     };
     window.addEventListener(TERM_RUN, onExternal);
 

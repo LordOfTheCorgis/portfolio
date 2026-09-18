@@ -109,13 +109,13 @@ const commands: Command[] = [
         return { lines: [`${c("blue", "projects/")}  about.txt  experience.log`] };
       }
       return {
-        lines: projects.map((p) => {
-          // padEnd on a coloured string counts escape codes, so pad the raw
-          // label and colour it after
-          const rawTags = `[${p.tags.join(",")}]`;
-          const pad = " ".repeat(Math.max(0, 14 - rawTags.length));
-          return `${c("blue", (p.id + "/").padEnd(18))}${c("muted", "[")}${tags(p.tags)}${c("muted", "]")}${pad}${p.summary}`;
-        }),
+        // name + tags on one line, summary wrapped underneath. one long line
+        // per project wrapped mid-word at the cell edge and looked terrible
+        lines: projects.flatMap((p) => [
+          `${c("blue", (p.id + "/").padEnd(18))}${c("muted", "[")}${tags(p.tags)}${c("muted", "]")}${p.href ? `  ${c("muted", "→")} ${c("aqua", p.href)}` : ""}`,
+          ...wrap(p.summary, 76).map((l) => `    ${c("fg-dim", l)}`),
+          "",
+        ]),
       };
     },
   },
