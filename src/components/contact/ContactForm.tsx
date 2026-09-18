@@ -28,7 +28,7 @@ export default function ContactForm() {
     const { name, email, message } = getValues();
     const subject = encodeURIComponent(`[portfolio] ${name}`);
     const body = encodeURIComponent(`${name} <${email}>\n\n${message}`);
-    window.location.href = `mailto:${SITE.email}?subject=${subject}&body=${body}`;
+    window.location.assign(`mailto:${SITE.email}?subject=${subject}&body=${body}`);
     setStatus({ state: "mailto" });
   };
 
@@ -131,7 +131,7 @@ export default function ContactForm() {
               {status.state === "sending" ? "sending…" : "$ send"}
             </button>
             <output aria-live="polite" className="text-[13px]">
-              {status.state === "sent" && <span className="text-green">✓ sent. I'll get back to you.</span>}
+              {status.state === "sent" && <span className="text-green">✓ sent. I&apos;ll get back to you.</span>}
               {status.state === "mailto" && (
                 <span className="text-fg-dim">opened your mail client with the message filled in.</span>
               )}

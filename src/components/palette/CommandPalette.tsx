@@ -97,12 +97,9 @@ export default function CommandPalette() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!open) setQuery("");
-  }, [open]);
-
   const select = (item: Item) => {
     setOpen(false);
+    setQuery("");
     // let the dialog unmount before scrolling or the focus restore fights lenis
     setTimeout(item.action, 60);
   };
@@ -112,7 +109,10 @@ export default function CommandPalette() {
   return (
     <Command.Dialog
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(o) => {
+        setOpen(o);
+        if (!o) setQuery("");
+      }}
       label="Command palette"
       loop
       overlayClassName="fixed inset-0 z-[70] bg-bg/70 backdrop-blur-[2px]"
