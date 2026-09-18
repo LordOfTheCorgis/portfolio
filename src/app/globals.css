@@ -60,8 +60,9 @@ body {
 }
 
 /*
-  Scanlines + vignette. Fixed overlay, pointer-events off, very low opacity.
+  Scanlines. Fixed overlay, pointer-events off, very low opacity.
   If you can *see* it at a glance it's too strong.
+  Had a vignette here too, cut it, three CRT effects was one too many.
 */
 .crt::before {
   content: "";
@@ -77,14 +78,6 @@ body {
     rgba(0, 0, 0, 0) 4px
   );
   mix-blend-mode: multiply;
-}
-.crt::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.35) 100%);
 }
 
 .glow {
