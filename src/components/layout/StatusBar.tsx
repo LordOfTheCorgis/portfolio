@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { sections, type SectionId } from "@/lib/sections";
 import { SITE } from "@/lib/site";
 import { serverCount } from "@/lib/data";
+import { openPalette } from "@/components/palette/CommandPalette";
 
 /*
   tmux status line as the site nav. Fixed bottom, windows are anchors,
@@ -78,6 +79,14 @@ export default function StatusBar() {
         </ul>
 
         <div className="ml-auto flex shrink-0 items-stretch">
+          <button
+            type="button"
+            onClick={openPalette}
+            className="px-3 text-fg-dim transition-colors hover:bg-rule hover:text-fg"
+            aria-label="Open command palette"
+          >
+            <span className="text-purple">⌘</span>K
+          </button>
           <span className="hidden sm:flex items-center gap-1.5 px-3 text-fg-dim">
             <span className="led inline-block h-1.5 w-1.5 rounded-full bg-green" style={{ ["--led-period" as string]: "2s" }} />
             {serverCount}+ srv

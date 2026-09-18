@@ -4,6 +4,7 @@ import "./globals.css";
 import { SITE } from "@/lib/site";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import StatusBar from "@/components/layout/StatusBar";
+import CommandPalette from "@/components/palette/CommandPalette";
 
 const jetbrains = JetBrains_Mono({
   variable: "--font-jetbrains",
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="crt min-h-full flex flex-col">
         <SmoothScroll>{children}</SmoothScroll>
         <StatusBar />
+        <CommandPalette />
       </body>
     </html>
   );
