@@ -22,9 +22,6 @@ export type Command = {
   run: (args: string[]) => CommandResult;
 };
 
-const line = (label: string, value: string) =>
-  `${c("amber", label.padEnd(10))}${value}`;
-
 // tag -> colour, same mapping the react side uses so a project reads the
 // same in the terminal as it does in the card grid
 const TAG_COLOR: Record<Tag, keyof typeof ansi> = {
