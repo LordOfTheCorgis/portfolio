@@ -126,8 +126,11 @@ export default function Terminal() {
       term.write(buffer);
     };
 
-    term.onData((data) => {
-      if (busy) return;
+    // keystrokes that land while a command is auto-typing get replayed
+    // after, instead of vanishing. yes I found this by typing into it.
+    const pending: string[] = [];
+
+    const handle = (data: string) => {
       switch (data) {
         case KEY.enter:
           execute(buffer);
@@ -184,6 +187,11 @@ export default function Terminal() {
         buffer += printable;
         term.write(printable);
       }
+    };
+
+    term.onData((data) => {
+      if (busy) pending.push(data);
+      else handle(data);
     });
 
     /*
@@ -214,6 +222,7 @@ export default function Terminal() {
         await wait(250);
       }
       busy = false;
+      while (pending.length) handle(pending.shift()!);
     };
     const typeAndRun = (cmd: string) => {
       queue.push(cmd);
