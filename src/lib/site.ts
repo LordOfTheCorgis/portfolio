@@ -14,6 +14,5 @@ export const SITE = {
   description:
     "Evan Voisel: LSU Computer Science + Artificial Intelligence student, founder of Lumix Solutions, running Proxmox infrastructure across 50+ servers. Systems, Linux, and the tooling around them.",
   github: "https://github.com/LordOfTheCorgis",
-  // TODO(evan): confirm the slug, this is a guess
   linkedin: "https://www.linkedin.com/in/evanvoisel",
 } as const;

@@ -119,3 +119,21 @@ body {
   scrollbar-width: thin;
   scrollbar-color: var(--color-rule-strong) transparent;
 }
+
+/* gruvbox warm ramp for the surname. text-shadow would paint over clipped
+   text so the glow goes through drop-shadow instead */
+.text-ember {
+  background: linear-gradient(100deg, #fabd2f 0%, #fe8019 55%, #fb4934 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 10px rgba(254, 128, 25, 0.28));
+}
+
+/* powerline-ish arrow between status bar segments */
+.seg-arrow {
+  width: 0;
+  height: 0;
+  border-top: var(--status-bar-h) solid transparent;
+  border-bottom: 0 solid transparent;
+}
